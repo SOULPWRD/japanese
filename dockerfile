@@ -6,14 +6,12 @@ ARG VERSION=0.9.9
 ENV VERSION=${VERSION}
 
 RUN wget https://github.com/BrianWill/japanese_vocab/archive/refs/tags/v${VERSION}.tar.gz
-RUN tar -xvzf v${VERSION}.tar.gz
-
-COPY japanese_vocab-${VERSION} .
-
+RUN tar --strip-components=1 -zxvf v${VERSION}.tar.gz
+RUN rm v${VERSION}.tar.gz
 RUN cd ./app \
     go get && \
-    go build -o japanese
+    go build -o build
 
 WORKDIR /app/app
 EXPOSE 8080
-CMD [ "./japanese" ]
+CMD [ "./build" ]
